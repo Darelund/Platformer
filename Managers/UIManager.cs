@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Pacman.GameManager;
 
-namespace Pacman
+namespace Platformer
 {
     public class UIManager
     {

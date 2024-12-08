@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using SharpDX.Direct3D9;
 using System.Collections.Generic;
 
-namespace Pacman
+namespace Platformer
 {
     public class Game1 : Game
     {

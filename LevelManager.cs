@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pacman
+namespace Platformer
 {
     public class LevelManager
     {
@@ -36,7 +36,7 @@ namespace Pacman
         {
             GetCurrentLevel.Draw(spriteBatch);
         }
-        private static void ActivateLevel(int levelIndex, LevelConfig levelConfig, bool runLevel)
+        private static void ActivateLevel(int levelIndex, string level, bool runLevel)
         {
             //Do I even need this check? It's not like I am gonna give it the wrong number.
             if (levelIndex > Levels.Count) return;
@@ -56,7 +56,7 @@ namespace Pacman
 
             if (LevelIndex < Levels.Count)
             {
-                GetCurrentLevel.CreateLevel(levelConfig.LevelFile, levelConfig.LevelStartPosition, levelConfig.TileData, levelConfig.GameObjectData);
+                GetCurrentLevel.CreateLevel(level);
 
                 if (runLevel)
                 {
@@ -81,9 +81,8 @@ namespace Pacman
         }
         private static void GetLevel(int newLevel, bool runLevel)
         {
-            //Temporary solution
-            //Should remove zero indexing
-            //And what is this switch mess? Should fix when I care
+
+
             switch (newLevel)
             {
                 case 0: ActivateLevel(newLevel, GameFiles.Levels.LevelData0, runLevel); break;
@@ -95,7 +94,7 @@ namespace Pacman
         public static void Restart()
         {
             ScoreManager.ResetScore();
-            ActivateLevel(1, GameFiles.Levels.LevelData1, true);
+            ActivateLevel(1, GameFiles.Levels.LevelData0, true);
         }
     }
 }

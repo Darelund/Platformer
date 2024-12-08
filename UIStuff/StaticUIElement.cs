@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pacman
+namespace Platformer
 {
     public abstract class StaticUIElement : UIElement
     {

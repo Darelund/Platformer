@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Pacman.GameFiles;
+using static Platformer.GameFiles;
 
-namespace Pacman
+namespace Platformer
 {
     public static class GameFiles
     {
@@ -15,11 +15,14 @@ namespace Pacman
             //  private static readonly Vector2 defaultLevelStartPosition = new Vector2(96, 96);
 
 
+            public const string LevelData0 = "level_0";
             public const string LevelData1 = "level_1";
-          //  public static readonly LevelConfig LevelData0 = new LevelConfig(Maps.DISPLAYMAP, defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));
-          //  public static readonly LevelConfig LevelData1 = new LevelConfig(Maps.MAP1, defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));
-          //  public static readonly LevelConfig LevelData2 = new LevelConfig(Maps.MAP2, defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));
-          //  public static readonly LevelConfig LevelData3 = new LevelConfig(Maps.MAP3, defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));
+            public const string LevelData2 = "level_2";
+            public const string LevelData3 = "level_3";
+            //  public static readonly LevelConfig LevelData0 = new LevelConfig(Maps.DISPLAYMAP, defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));
+            //  public static readonly LevelConfig LevelData1 = new LevelConfig(Maps.MAP1, defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));
+            //  public static readonly LevelConfig LevelData2 = new LevelConfig(Maps.MAP2, defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));
+            //  public static readonly LevelConfig LevelData3 = new LevelConfig(Maps.MAP3, defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));
 
             //public static readonly LevelConfig LevelData = new LevelConfig("Content/Map.txt", defaultLevelStartPosition);
         }

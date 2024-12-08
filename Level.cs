@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Pacman.GameFiles;
 
-namespace Pacman
+namespace Platformer
 {
     public class Level
     {
@@ -40,11 +40,11 @@ namespace Pacman
         /// Creates a 2D grid level based on the file you give it. In the file each character represents one tile. 
         /// So you give it a list of tuples where each tuple is its character, texture and if you can walk on it.
         /// </summary>
-        /// <param name="file"></param>
+        /// <param name="levelFile"></param>
         /// <param name="tileTexture"></param>
-        public void CreateLevel(string file, Vector2 startPosition, List<(char TileName, Texture2D tileTexture, TileType type, Color tileColor)> tileConfigurations, List<char> GameObjectConfigurations)
+        public void CreateLevel(string levelFile)
         {
-            List<string> result = FileManager.ReadFromFile(file);
+            List<string> result = FileManager.ReadFromFile(levelFile);
             _startPosition = startPosition;
             _tiles = new Tile[result[0].Length, result.Count];
 
@@ -87,82 +87,6 @@ namespace Pacman
                     }
                 }
             }
-            Debug.WriteLine(GameManager.GameObjects.Count);
-            foreach (Teleport teleport in GameManager.GameObjects.FindAll(obj => obj.GetType() == typeof(Teleport)).ToList())
-            {
-                //Find the teleports array location 
-                var location = GetTileAtPosition(teleport.Position);
-              //  Debug.WriteLine($"X: {location.X} Y: {location.Y}");
-
-                string tileKey = string.Empty;
-                (int y, int x)[] directions = { (-1, 0), (0, 1), (1, 0), (0, -1) };
-
-                foreach (var (y, x) in directions)
-                {
-                    int newY = location.Y + y;
-                    int newX = location.X + x;
-
-                    // tileKey += IsTileWall(new(newX, newY)) ? "0" : "1";
-                    if (!TileExistsAtPosition(new Point(newX, newY)))
-                    {
-                        tileKey += "1";
-                        continue;
-                    }
-                    tileKey +=  "0";
-                }
-                // tileKey;
-
-                Vector2 teleportDirection = tileKey switch
-                {
-                    "1000" => new Vector2(0, 1),
-                    "0100" => new Vector2(1, 0),
-                    "0010" => new Vector2(0, -1),
-                    "0001" => new Vector2(-1, 0),
-                    _ => new Vector2(0, 1)
-                };
-              //  Debug.WriteLine(tileKey);
-                float maxDistance = 0;
-                int tileToPick = 0;
-                char teleportLocation = 't';
-                Tile tile;
-               // Debug.WriteLine(teleportDirection);
-                //This part
-                if(teleportDirection.X != 0)
-                {
-                    //X
-                    for (int i = 0; i < _tiles.GetLength(0); i++)
-                    {
-                        if (_tiles[i, location.Y].Name != teleportLocation) continue;
-                        if (Vector2.Distance(location.ToVector2(), new Vector2(i, location.Y)) > maxDistance)
-                        {
-                            maxDistance = Vector2.Distance(location.ToVector2(), new Vector2(location.X, i));
-                            tileToPick = i;
-                        }
-                    }
-                    tile = _tiles[tileToPick, location.Y];
-                   
-
-                }
-                else
-                {
-                    //Y 7 13
-                    for (int i = 0; i < _tiles.GetLength(1); i++)
-                    {
-                        if (_tiles[location.X, i].Name != teleportLocation) continue;
-                        if (Vector2.Distance(location.ToVector2(), new Vector2(location.X, i)) > maxDistance)
-                        {
-                            maxDistance = Vector2.Distance(location.ToVector2(), new Vector2(location.X, i));
-                            tileToPick = i;
-                           // Debug.WriteLine(i);
-                        }
-                    }
-                    tile = _tiles[location.X, tileToPick];
-                   
-                }
-                tile.Type = TileType.Path;
-                tile.SwitchTile(ResourceManager.GetTexture("empty"));
-                teleport.SetPosition(tile.Pos);
-            }
         }
 
         public virtual bool IsLevelCompleted()
@@ -187,40 +111,7 @@ namespace Pacman
             GameManager.GameObjects.Clear();
         }
 
-        //Maybe use?
-        public void CreateGameObjects(string objectsFilePath)
-        {
-            //List<string> fileLines = FileManager.ReadFromFile(objectsFilePath);
-
-            //int i = 0;
-            //while (i < fileLines.Count)
-            //{
-            //    // Get the object type from the first line
-            //    string objectType = fileLines[i].Trim();
-            //    i++;  // Move to the next line for object data
-
-            //    // Read the relevant properties for each object
-            //    List<string> objectData = new List<string>();
-
-            //    while (i < fileLines.Count && !string.IsNullOrWhiteSpace(fileLines[i]))
-            //    {
-            //        objectData.Add(fileLines[i].Trim());
-            //        i++;
-            //    }
-
-            //    // Create the appropriate game object based on the object type
-            //    GameObject newObject = _factory.CreateGameObjectFromType(objectType, objectData);
-
-            //    if (newObject != null)
-            //    {
-            //        GameObjectsInLevel.Add(newObject);
-            //    }
-
-            //    i++;  // Skip the blank line between object definitions
-            //}
-        }
-       // public abstract void SetTarget();
-
+       
 
         public static List<(char TileName, Texture2D tileTexture, TileType Type, Color tileColor)> ReadTileDataFromFile(string fileName)
         {
