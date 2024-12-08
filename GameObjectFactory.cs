@@ -11,166 +11,23 @@ namespace Platformer
 {
     public class GameObjectFactory
     {
-        public GameObject CreateGameObjectFromType((char ObjectType, Vector2 Position) data)
+        public static GameObject CreateGameObject((string type, Vector2 position) data)
         {
-            switch (data.ObjectType)
+            var type = data.type;
+            return type switch
             {
-                case 'E':
-                    Debug.WriteLine("An enemy is created(Factory)");
-                    return CreateEnemyController(data.Position);
-                case 'P':
-                    return CreatePlayerController(data.Position);
-                case 'C':
-                    return CreateItem(data.Position);
-                case 'T':
-                    return CreateTeleport(data.Position);
-                default:
-                    Debug.WriteLine("Unknown object type: " + data.ObjectType);
-                    return null;
-            }
+                "enemy" => CreateEnemyController(data.position),
+                "player" => CreatePlayerController(data.position),
+                "platform" => CreatePlatform(data.position),
+                "item" => CreatePlayerController(data.position),
+                _ => CreatePlatform(data.position)
+                //Will maybe add back
+                //case 'T':
+                //    return CreateTeleport(data.Position);
+            };
         }
-        //private EnemyController CreateEnemyController(List<string> data)
-        //{
 
-        //    string sprite = data[0];  // Texture
-        //    string[] positionParts = data[1].Split(',');
-        //    int xPos = int.Parse(positionParts[0].Trim());
-        //    int yPos = int.Parse(positionParts[1].Trim());
-        //    Vector2 position = new Vector2(xPos, yPos);
-
-        //    string colorName = data[2].Trim();
-        //    Color color = colorName switch
-        //    {
-        //        "white" => Color.White,
-        //        "red" => Color.Red,
-        //        "blue" => Color.Blue,
-        //        "green" => Color.Green,
-        //        _ => Color.White
-        //    };
-
-        //    float rotation = float.Parse(data[3].Trim());
-        //    float size = float.Parse(data[4].Trim());
-        //    float layerDepth = float.Parse(data[5].Trim());
-
-        //    string[] originParts = data[6].Split(',');
-        //    xPos = int.Parse(originParts[0].Trim());
-        //    yPos = int.Parse(originParts[1].Trim());
-        //    Vector2 origin = new Vector2(xPos, yPos);
-
-        //    var animationClips = new Dictionary<string, AnimationClip>();
-
-        //    for (int i = 7; i < data.Count; i++)
-        //    {
-        //        string animationData = data[i];
-        //        if (!string.IsNullOrWhiteSpace(animationData))
-        //        {
-        //            // Split each animation data (format: "Name:rect1|rect2|...;speed")
-        //            string[] animationParts = animationData.Split(':');
-        //            string animationName = animationParts[0].Trim();
-
-        //            string[] rectsAndSpeed = animationParts[1].Split(';');
-        //            string[] rectStrings = rectsAndSpeed[0].Split('|'); // Each rectangle info
-
-        //            // Create an array of rectangles for the animation
-        //            Rectangle[] frames = rectStrings.Select(rectStr =>
-        //            {
-        //                string[] rectComponents = rectStr.Split(',');
-        //                int rectX = int.Parse(rectComponents[0].Trim());
-        //                int rectY = int.Parse(rectComponents[1].Trim());
-        //                int rectWidth = int.Parse(rectComponents[2].Trim());
-        //                int rectHeight = int.Parse(rectComponents[3].Trim());
-
-        //                return new Rectangle(rectX, rectY, rectWidth, rectHeight);
-        //            }).ToArray();
-
-        //            // Parse the speed of the animation
-        //            float animationSpeed = float.Parse(rectsAndSpeed[1].Trim());
-
-        //            // Add the parsed animation to the dictionary
-        //            animationClips[animationName] = new AnimationClip(frames, animationSpeed);
-        //        }
-        //    }
-        //    return new EnemyController(
-        //        ResourceManager.GetTexture(sprite),
-        //        position,
-        //        color,
-        //        rotation,
-        //        size,
-        //        layerDepth,
-        //        origin,
-        //        animationClips
-        //    );
-        //}
-        //private PlayerController CreatePlayerController(List<string> data)
-        //{
-        //    string sprite = data[0];
-        //    string[] positionParts = data[1].Split(',');
-        //    float xPos = float.Parse(positionParts[0].Trim());
-        //    float yPos = float.Parse(positionParts[1].Trim());
-        //    Vector2 position = new Vector2(xPos, yPos);
-
-        //    float speed = float.Parse(data[2]);
-        //    string colorName = data[3].Trim();
-        //    Color color = colorName switch
-        //    {
-        //        "white" => Color.White,
-        //        "red" => Color.Red,
-        //        "blue" => Color.Blue,
-        //        "green" => Color.Green,
-        //        _ => Color.White
-        //    };
-
-        //    float rotation = float.Parse(data[4].Trim());
-        //    float size = float.Parse(data[5].Trim());
-        //    float layerDepth = float.Parse(data[6].Trim());
-
-        //    string[] originParts = data[7].Split(',');
-        //    xPos = float.Parse(originParts[0].Trim());
-        //    yPos = float.Parse(originParts[1].Trim());
-        //    Vector2 origin = new Vector2(xPos, yPos);
-
-        //    var animationClips = new Dictionary<string, AnimationClip>();
-        //    for (int i = 8; i < data.Count; i++)
-        //    {
-        //        string animationData = data[i];
-        //        if (!string.IsNullOrWhiteSpace(animationData))
-        //        {
-        //            string[] animationParts = animationData.Split(':');
-        //            string animationName = animationParts[0].Trim();
-
-        //            string[] rectsAndSpeed = animationParts[1].Split(';');
-        //            string[] rectStrings = rectsAndSpeed[0].Split('|');
-
-        //            Rectangle[] frames = rectStrings.Select(rectStr =>
-        //            {
-        //                string[] rectComponents = rectStr.Split(',');
-        //                int rectX = int.Parse(rectComponents[0].Trim());
-        //                int rectY = int.Parse(rectComponents[1].Trim());
-        //                int rectWidth = int.Parse(rectComponents[2].Trim());
-        //                int rectHeight = int.Parse(rectComponents[3].Trim());
-
-        //                return new Rectangle(rectX, rectY, rectWidth, rectHeight);
-        //            }).ToArray();
-
-        //            float animationSpeed = float.Parse(rectsAndSpeed[1].Trim());
-
-        //            animationClips[animationName] = new AnimationClip(frames, animationSpeed);
-        //        }
-        //    }
-
-        //    return new PlayerController(
-        //        ResourceManager.GetTexture(sprite),
-        //        position,
-        //        color,
-        //        rotation,
-        //        size,
-        //        layerDepth,
-        //        origin,
-        //        animationClips
-        //    );
-        //}
-
-        private EnemyController CreateEnemyController(Vector2 data)
+        private static EnemyController CreateEnemyController(Vector2 data)
         {
             string sprite = "ghost";
             //Offset because character is bigger than tiles
@@ -249,7 +106,7 @@ namespace Platformer
                 animationClips
             );
         }
-        private PlayerController CreatePlayerController(Vector2 data)
+        private static PlayerController CreatePlayerController(Vector2 data)
         {
             string sprite = "pacman_white";
             //Offset because character is bigger than tiles
@@ -323,7 +180,7 @@ namespace Platformer
             );
         }
 
-        private Item CreateItem(Vector2 data)
+        private static Item CreateItem(Vector2 data)
         {
             Random ran = new Random();
 
@@ -411,12 +268,12 @@ namespace Platformer
                   );
             }
         }
-        private Teleport CreateTeleport(Vector2 data)
+        private static Platform CreatePlatform(Vector2 data)
         {
+            Vector2 position = data;
             string sprite = "empty";
             //Vector2 positionOffset = new Vector2(14.5f, 14.5f);
-            Vector2 position = data;
-
+            PlatformType type = PlatformType.Unbreakable;
             //float speed = float.Parse(data[2]);
             Color color = Color.White;
             //Color color = colorName switch
@@ -429,24 +286,59 @@ namespace Platformer
             //    "pink" => Color.HotPink,
             //    _ => Color.White
             //};
+
             float rotation = 0;
-            float size = 0.8f; // To make it same size as the other tiles
-            float layerDepth = 0.1f;
+            float size = 1f;
+            float layerDepth = 0.9f;
 
 
             Vector2 origin = new Vector2(0, 0);
-
-           
-
-            return new Teleport(
+            return new Platform(
                 ResourceManager.GetTexture(sprite),
                 position,
+                type,
                 color,
                 rotation,
                 size,
-                layerDepth,
-                origin
-            );
+                layerDepth
+                );
         }
+        //private Teleport CreateTeleport(Vector2 data)
+        //{
+        //    string sprite = "empty";
+        //    //Vector2 positionOffset = new Vector2(14.5f, 14.5f);
+        //    Vector2 position = data;
+
+        //    //float speed = float.Parse(data[2]);
+        //    Color color = Color.White;
+        //    //Color color = colorName switch
+        //    //{
+        //    //    "white" => Color.White,
+        //    //    "yellow" => Color.Yellow,
+        //    //    "red" => Color.Red,
+        //    //    "blue" => Color.Blue,
+        //    //    "green" => Color.Green,
+        //    //    "pink" => Color.HotPink,
+        //    //    _ => Color.White
+        //    //};
+        //    float rotation = 0;
+        //    float size = 0.8f; // To make it same size as the other tiles
+        //    float layerDepth = 0.1f;
+
+
+        //    Vector2 origin = new Vector2(0, 0);
+
+           
+
+        //    return new Teleport(
+        //        ResourceManager.GetTexture(sprite),
+        //        position,
+        //        color,
+        //        rotation,
+        //        size,
+        //        layerDepth,
+        //        origin
+        //    );
+        //}
     }
 }

@@ -52,7 +52,7 @@ namespace Platformer
             AudioManager.LoadContent();
             HighScore.LoadScores();
             LevelManager.CreateLevels();
-           // LevelManager.SpecificLevel(0, false);
+            LevelManager.SpecificLevel(0, false);
         }
 
 
@@ -64,7 +64,7 @@ namespace Platformer
                     InputManager.Update();
 
                     //Maybe add back in the future
-                   // LevelManager.GetCurrentLevel.Update(gameTime);
+                    LevelManager.GetCurrentLevel.Update(gameTime);
 
                     UIManager.Update(gameTime);
                     foreach (var gameObject in GameObjects)
@@ -133,7 +133,7 @@ namespace Platformer
                 case GameState.MainMenu:
 
                     //Maybe add back in the future
-                    //LevelManager.GetCurrentLevel.Draw(spriteBatch);
+                    LevelManager.GetCurrentLevel.Draw(spriteBatch);
                     UIManager.Draw(spriteBatch);
                     foreach (var gameObject in GameObjects)
                     {

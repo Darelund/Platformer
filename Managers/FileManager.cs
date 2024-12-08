@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Platformer
 {
+    //Not used right now
     public static class FileManager
     {
         /// <summary>
