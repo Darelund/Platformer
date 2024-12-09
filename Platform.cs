@@ -20,10 +20,9 @@ namespace Platformer
         public PlatformType Type { get; set; }
 
         //Collision needs to be added
-        public override Rectangle Collision => new Rectangle(0, 0, 0, 0);
+        public override Rectangle Collision => Rect;
 
         //Not used right now
-        private Rectangle _sourceRec = new Rectangle(0, 0, 40, 20);
 
         public Platform(Texture2D texture, Rectangle rect, PlatformType type, Color color, float rotation, float layerDepth) : base(texture, rect, color, rotation, layerDepth, Vector2.Zero /* Maybe add an origo to platforms*/ )
         {
@@ -54,5 +53,6 @@ namespace Platformer
         {
           //  throw new NotImplementedException();
         }
+
     }
 }

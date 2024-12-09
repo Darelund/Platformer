@@ -47,7 +47,7 @@ namespace Platformer
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             ResourceManager.LoadResources(Content, _textures, _sounds, _music, _font, _effects);
-
+            DebugRectangle.Init(GraphicsDevice, 50, 50);
             //Rectangle[] playerWalking =
             //{
             //    new Rectangle(0, 0, 39, 39),

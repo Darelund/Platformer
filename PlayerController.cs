@@ -3,8 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Platformer
@@ -25,6 +27,7 @@ namespace Platformer
         private Vector2 newDirection;
         private Vector2 destination;
         bool moving = false;
+        private Platform _lastCollidedPlatform;
 
         private float _maxHealth = 3;
         private float _currentHealth;
@@ -40,10 +43,14 @@ namespace Platformer
         private float _sprintSpeed = 50;
         private float _fallSpeed = 50f;
 
-        private bool _isGrounded;
+        private bool _isGrounded = false;
         private bool _isSprinting;
         private bool _isAttacking;
+
         private bool _isJumping;
+        private bool _canJump = true;
+        private float _timer = 0;
+        private bool _canCollide = true;
 
         protected float Speed
         {
@@ -55,7 +62,7 @@ namespace Platformer
                 }
                 else
                 {
-                    if (_isSprinting && _isGrounded)
+                    if (_isSprinting)
                     {
                         return normalSpeed + _sprintSpeed;
                     }
@@ -98,22 +105,43 @@ namespace Platformer
             if (!_isActive) return;
 
             StateMachine(gameTime);
+            Debug.WriteLine(_isGrounded);
+            if(_isGrounded && !_canJump)
+            {
+                Position = new Vector2(Position.X, Position.Y - 3);
+                _timer += (float)gameTime.TotalGameTime.TotalSeconds;
 
-
-            Debug.WriteLine(Position.ToString());
-
+                if(_timer > 3)
+                {
+                    _canJump = true;
+                    _timer = 0;
+                    _canCollide = true;
+                }
+            }
+            else if(!_isGrounded)
+            {
+                //Apply gravity
+                Position = new Vector2(Position.X, Position.Y + 1);
+            }
+            if(_isGrounded && (Rect.Right < _lastCollidedPlatform.Collision.Left || Rect.Left > _lastCollidedPlatform.Collision.Right))
+            {
+                _isGrounded = false;
+            }
             base.Update(gameTime);
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, new Rectangle((int)Position.X, (int)Position.Y, Rect.Width, Rect.Height), _currentClip.GetCurrentSourceRectangle(), Color, Rotation, Origin, SpriteEffect, LayerDepth);
-          //  base.Draw(spriteBatch);
+           // spriteBatch.Draw(Texture, new Rectangle((int)Position.X, (int)Position.Y, Rect.Width, Rect.Height), _currentClip.GetCurrentSourceRectangle(), Color, Rotation, Origin, SpriteEffect, LayerDepth);
+            base.Draw(spriteBatch);
+            if( _isGrounded )
+                spriteBatch.DrawRectangle(_lastCollidedPlatform.Collision, Color.Red);
         }
         private void StateMachine(GameTime gameTime)
         {
             direction = InputManager.GetMovement();
            _isSprinting = InputManager.IsLeftShiftDown();
            _isAttacking = InputManager.LeftClick();
+            if(_canJump)
            _isJumping = InputManager.IsSpacebarDown();
 
             switch (PlayerState)
@@ -125,7 +153,7 @@ namespace Platformer
                     break;
 
                 case PlayerState.Walking:
-                    if (direction != Vector2.Zero) ChangeState(PlayerState.Idle);
+                    if (direction == Vector2.Zero) ChangeState(PlayerState.Idle);
                     else if (_isJumping) ChangeState(PlayerState.Jumping);
                     else if (_isAttacking) ChangeState(PlayerState.Attacking);
                     else if (_isSprinting) ChangeState(PlayerState.Sprinting);
@@ -136,6 +164,7 @@ namespace Platformer
                     if (!_isSprinting || direction == Vector2.Zero) ChangeState(PlayerState.Walking);
                     else if (_isJumping) ChangeState(PlayerState.Jumping);
                     else if (_isAttacking) ChangeState(PlayerState.Attacking);
+                    Move(gameTime);
                     break;
 
                 case PlayerState.Attacking:
@@ -143,6 +172,8 @@ namespace Platformer
                     break;
 
                 case PlayerState.Jumping:
+                    _canJump = false;
+                    _canCollide = false;
                     if (!_isJumping) ChangeState(PlayerState.Idle);
                     break;
 
@@ -217,7 +248,7 @@ namespace Platformer
         }
         public override void OnCollision(GameObject gameObject)
         {
-            if (!_isActive) return;
+            if (!_isActive || !_canCollide) return;
             if (gameObject is EnemyController && PlayerState == PlayerState.Walking)
             {
                 // var enemsy = (EnemyController)gameObject;
@@ -236,6 +267,14 @@ namespace Platformer
                     //YEs memory leak, so what??? Or is it?
                     TakeDamage(1);
                 }
+            }
+            if (gameObject is Platform)
+            {
+                _isGrounded = true;
+                Rect.Y = gameObject.Collision.Top-Rect.Height;
+                Position = new Vector2(Position.X, Rect.Y + 12);
+
+                _lastCollidedPlatform = (Platform)gameObject;
             }
         }
         public void ImmuneHandler(bool immune)

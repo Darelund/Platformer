@@ -87,6 +87,14 @@ namespace Platformer
                     {
                         gameObject.Update(gameTime);
                     }
+                    CollisionManager.CheckCollision();
+                    for (int i = 0; i < _flashEffects.Count; i++)
+                    {
+                        if (!_flashEffects[i].IsActive)
+                            _flashEffects.RemoveAt(i);
+                        else
+                            _flashEffects[i].Update(gameTime);
+                    }
                     break;
                 case GameState.SelectCharacter:
                     InputManager.Update();

@@ -109,7 +109,7 @@ namespace Platformer
         {
             string sprite = "mario-pauline-transparent";
             //Offset because character is bigger than tiles
-            Vector2 positionOffset = new Vector2(14.5f, 14.5f);
+            Vector2 positionOffset = new Vector2(0, 4);
             Rectangle rect = data;
 
             //float speed = float.Parse(data[2]);
@@ -128,7 +128,7 @@ namespace Platformer
             float layerDepth = 0;
 
             
-            Vector2 origin = new Vector2(19.5f, 19.5f);
+            Vector2 origin = new Vector2(8, 8) - positionOffset;
 
             Rectangle[] idle =
            {
@@ -172,6 +172,10 @@ namespace Platformer
                 new Rectangle(154, 1, 16, 16),
                 new Rectangle(154, 1, 16, 16),
             };
+            Rectangle[] Jump =
+          {
+                new Rectangle(16, 1, 16, 16),
+            };
 
             Dictionary<string, AnimationClip> animationClips = new Dictionary<string, AnimationClip>()
             {
@@ -180,7 +184,8 @@ namespace Platformer
                 {"Sprint",  new AnimationClip(sprint, 10f)},
                 {"Attack",  new AnimationClip(attack, 7f)},
                 {"Die",  new AnimationClip(die, 4f)},
-                {"Climb",  new AnimationClip(climb, 6f)}
+                {"Climb",  new AnimationClip(climb, 6f)},
+                {"Jump",  new AnimationClip(Jump, 6f)}
             };
 
             return new PlayerController(
