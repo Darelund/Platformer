@@ -15,71 +15,72 @@ namespace Platformer
         private static JObject wholeObject;
         private static string currentFileName;
 
-        public static Vector2 GetVector(string fileName, string propertyName)
+        public static Rectangle GetRectangle(string fileName, string propertyName)
         {
             if (wholeObject == null || currentFileName == null || currentFileName != null)
             {
                 GetJObjectFromFile(fileName);
             }
             JObject obj = wholeObject.GetValue(propertyName) as JObject;
-            return GetVector(obj);
+            return GetRectangle(obj);
         }
-        public static List<Vector2> GetVectors(string fileName, string propertyName)
+        public static List<Rectangle> GetRectangles(string fileName, string propertyName)
         {
             if (wholeObject == null || currentFileName == null || currentFileName != null)
             {
                 GetJObjectFromFile(fileName);
             }
 
-            List<Vector2> list = new List<Vector2>();
+            List<Rectangle> list = new List<Rectangle>();
             JArray arrayObject = wholeObject.GetValue(propertyName) as JArray;
 
             for (int i = 0; i < arrayObject.Count; i++)
             {
                 JObject obj = (JObject)arrayObject[i];
 
-                list.Add(GetVector(obj));
+                list.Add(GetRectangle(obj));
             }
             return list;
         }
         private static void GetJObjectFromFile(string fileName)
         {
             currentFileName = fileName;
-            StreamReader file = File.OpenText(fileName);
+            StreamReader file = File.OpenText($"Content/{fileName}");
             JsonTextReader reader = new JsonTextReader(file);
             wholeObject = JObject.Load(reader);
             file.Close();
         }
-        private static Vector2 GetVector(JObject obj)
+        private static Rectangle GetRectangle(JObject obj)
         {
             int x = Convert.ToInt32(obj.GetValue("positionX"));
             int y = Convert.ToInt32(obj.GetValue("positionY"));
-          //  int width = Convert.ToInt32(obj.GetValue("width"));
-          //  int height = Convert.ToInt32(obj.GetValue("height"));
+            int width = Convert.ToInt32(obj.GetValue("width"));
+            int height = Convert.ToInt32(obj.GetValue("height"));
 
-            return new Vector2(x, y);
+            return new Rectangle(x, y, width, height);
         }
         public static List<GameObject> CreateGameObjects(string fileName)
         {
             string player = "player";
-            string platform = "platform";
-            string enemy = "enemy";
+            string platform = "platforms";
+            string enemy = "enemies";
 
             List<GameObject> gameObjects = new List<GameObject>();
 
-            Vector2 playerVec = GetVector(fileName, player);
-            gameObjects.Add(GameObjectFactory.CreateGameObject((player, playerVec )));
+            //Removing play for now
+           // Vector2 playerVec = GetVector(fileName, player);
+           // gameObjects.Add(GameObjectFactory.CreateGameObject((player, playerVec )));
 
-            List<Vector2> vecList = GetVectors(fileName, platform);
-            foreach (Vector2 vec in vecList)
+            List<Rectangle> vecList = GetRectangles(fileName, platform);
+            foreach (Rectangle vec in vecList)
             {
                 gameObjects.Add(GameObjectFactory.CreateGameObject((platform, vec)));
             }
 
-            vecList = GetVectors(fileName, enemy);
-            foreach (Vector2 vec in vecList)
+            vecList = GetRectangles(fileName, enemy);
+            foreach (Rectangle vec in vecList)
             {
-                gameObjects.Add(GameObjectFactory.CreateGameObject((enemy, playerVec)));
+                gameObjects.Add(GameObjectFactory.CreateGameObject((enemy, vec)));
             }
 
             return gameObjects;

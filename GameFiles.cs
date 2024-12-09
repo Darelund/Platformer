@@ -15,10 +15,10 @@ namespace Platformer
             //  private static readonly Vector2 defaultLevelStartPosition = new Vector2(96, 96);
 
 
-            public const string LevelData0 = "level_0";
-            public const string LevelData1 = "level_1";
-            public const string LevelData2 = "level_2";
-            public const string LevelData3 = "level_3";
+            public const string LevelData0 = "level_0.Json";
+            public const string LevelData1 = "level_1.Json";
+            public const string LevelData2 = "level_2.Json";
+            public const string LevelData3 = "level_3.Json";
             //  public static readonly LevelConfig LevelData0 = new LevelConfig(Maps.DISPLAYMAP, defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));
             //  public static readonly LevelConfig LevelData1 = new LevelConfig(Maps.MAP1, defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));
             //  public static readonly LevelConfig LevelData2 = new LevelConfig(Maps.MAP2, defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));

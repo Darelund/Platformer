@@ -11,7 +11,10 @@ namespace Platformer
     public abstract class GameObject
     {
         protected Texture2D Texture;
-        public Vector2 Position { get; set; }
+
+        //Maybe
+        // public Vector2 Position { get; set; }
+        protected Rectangle Rect;
         protected Color Color;
         protected float Rotation;
         protected float Size;
@@ -20,10 +23,10 @@ namespace Platformer
         protected SpriteEffects SpriteEffect;
         public abstract Rectangle Collision { get; }
 
-        public GameObject(Texture2D texture, Vector2 position, Color color, float rotation, float size, float layerDepth, Vector2 origin)
+        public GameObject(Texture2D texture, Rectangle rect, Color color, float rotation, float size, float layerDepth, Vector2 origin)
         {
             Texture = texture;
-            Position = position;
+            Rect = rect;
             Color = color;
             Rotation = rotation;
             Size = size;
@@ -34,7 +37,7 @@ namespace Platformer
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, Position, null, Color, Rotation, Origin, Size, SpriteEffect, LayerDepth);
+            spriteBatch.Draw(Texture, Rect, null, Color, Rotation, Origin, SpriteEffect, LayerDepth);
         }
         public abstract void OnCollision(GameObject gameObject);
     }

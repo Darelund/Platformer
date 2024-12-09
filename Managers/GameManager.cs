@@ -64,8 +64,24 @@ namespace Platformer
                     InputManager.Update();
 
                     //Maybe add back in the future
-                    LevelManager.GetCurrentLevel.Update(gameTime);
+                    //LevelManager.GetCurrentLevel.Update(gameTime);
+                    for (int i = 0; i < GameObjects.Count; i++)
+                    {
+                        if (GameObjects[i] is PlayerController)
+                        {
+                            var player = GameObjects[i] as PlayerController;
+                            if (player.Health <= 0)
+                            {
+                                OnGameOver?.Invoke(Color.Black, GameState.GameOver);
+                            }
 
+                            if (LevelManager.GetCurrentLevel.IsLevelCompleted())
+                            {
+                                OnWin?.Invoke(Color.Green, GameState.Victory);
+                            }
+                        }
+                        GameObjects[i].Update(gameTime);
+                    }
                     UIManager.Update(gameTime);
                     foreach (var gameObject in GameObjects)
                     {
@@ -133,12 +149,34 @@ namespace Platformer
                 case GameState.MainMenu:
 
                     //Maybe add back in the future
-                    LevelManager.GetCurrentLevel.Draw(spriteBatch);
-                    UIManager.Draw(spriteBatch);
+                    // LevelManager.GetCurrentLevel.Draw(spriteBatch);
                     foreach (var gameObject in GameObjects)
                     {
+                        bool isFlashing = false;
+
+                        foreach (var effect in _flashEffects)
+                        {
+                            if (effect.IsActiveOnObject(gameObject))
+                            {
+                                effect.ApplyDrawEffect(spriteBatch);
+                                isFlashing = true;
+                                break;
+                            }
+                        }
                         gameObject.Draw(spriteBatch);
+
+                        if (isFlashing)
+                        {
+                            spriteBatch.End();
+                            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointWrap);
+                        }
                     }
+
+                    UIManager.Draw(spriteBatch);
+                    //foreach (var gameObject in GameObjects)
+                    //{
+                    //    gameObject.Draw(spriteBatch);
+                    //}
                     break;
                 case GameState.SelectCharacter:
                     CharacterSelector.Draw(spriteBatch);

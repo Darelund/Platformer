@@ -271,7 +271,7 @@ namespace Platformer
         private static Platform CreatePlatform(Vector2 data)
         {
             Vector2 position = data;
-            string sprite = "empty";
+            string sprite = "wall";
             //Vector2 positionOffset = new Vector2(14.5f, 14.5f);
             PlatformType type = PlatformType.Unbreakable;
             //float speed = float.Parse(data[2]);

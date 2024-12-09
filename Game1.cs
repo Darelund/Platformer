@@ -12,7 +12,7 @@ namespace Platformer
         private SpriteBatch _spriteBatch;
 
         //Remove and add new textures
-        private const string _textures = "ghost,pacman,tiles,pacman-character-yellow,pacman-character-pink,pacman-heart,empty,pacman_white,pacman_deathClip";
+        private const string _textures = "wall,ghost,pacman,tiles,pacman-character-yellow,pacman-character-pink,pacman-heart,empty,pacman_white,pacman_deathClip";
         private const string _sounds = "DeathSound,HardPop,FlameDamage,CoinPickupSound";
         private const string _music = "BackgroundMusic";
         private const string _font = "GameText";
@@ -71,25 +71,17 @@ namespace Platformer
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            //InputManager.Update();
-            //_playerController.Update(gameTime);
+           
             GameManager.Update(gameTime);
-            // TODO: Add your update logic here
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
-
-
-            //_spriteBatch.Begin();
-            //_playerController.Draw(_spriteBatch);
-            //_spriteBatch.End();
-            // TODO: Add your drawing code here
-
+            GraphicsDevice.Clear(Color.CornflowerBlue);
             GameManager.Draw(_spriteBatch);
+
             base.Draw(gameTime);
         }
     }

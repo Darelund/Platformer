@@ -65,12 +65,12 @@ namespace Platformer
                 if (newDirection.Length() != 0)
                     direction = newDirection;
 
-                if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
-                {
-                    var newDestination = Position + (direction * Level.TileSize);
-                    destination = newDestination;
-                    moving = true;
-                }
+                //if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
+                //{
+                //    var newDestination = Position + (direction * Level.TileSize);
+                //    destination = newDestination;
+                //    moving = true;
+                //}
             }
             else
             {
@@ -99,43 +99,43 @@ namespace Platformer
            
 
             direction = InputManager.GetMovement();
-            if (LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
-            {
-                direction = Vector2.Zero;
-                //Not necessary but makes the code clearer
-                //Or I actually think I need to set it to false
-                //Or I do think No I don't need it because I set the direction to zero, so it will go back to false in the Update either way
-                //Eh lets just leave it
-                moving = false;
-            }
-            else
-            {
-                if (direction.Length() != 0)
-                {
-                    if (direction.X != 0)
-                    {
-                        if (direction.X == -1)
-                        {
-                            Rotation = MathHelper.ToRadians(180);
-                        }
-                        else
-                        {
-                            Rotation = MathHelper.ToRadians(0);
-                        }
-                    }
-                    else
-                    {
-                        if (direction.Y == -1)
-                        {
-                            Rotation = MathHelper.ToRadians(270);
-                        }
-                        else
-                        {
-                            Rotation = MathHelper.ToRadians(90);
-                        }
-                    }
-                }
-            }
+            //if (LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
+            //{
+            //    direction = Vector2.Zero;
+            //    //Not necessary but makes the code clearer
+            //    //Or I actually think I need to set it to false
+            //    //Or I do think No I don't need it because I set the direction to zero, so it will go back to false in the Update either way
+            //    //Eh lets just leave it
+            //    moving = false;
+            //}
+            //else
+            //{
+            //    if (direction.Length() != 0)
+            //    {
+            //        if (direction.X != 0)
+            //        {
+            //            if (direction.X == -1)
+            //            {
+            //                Rotation = MathHelper.ToRadians(180);
+            //            }
+            //            else
+            //            {
+            //                Rotation = MathHelper.ToRadians(0);
+            //            }
+            //        }
+            //        else
+            //        {
+            //            if (direction.Y == -1)
+            //            {
+            //                Rotation = MathHelper.ToRadians(270);
+            //            }
+            //            else
+            //            {
+            //                Rotation = MathHelper.ToRadians(90);
+            //            }
+            //        }
+            //    }
+            //}
            
             return direction;
         }

@@ -100,147 +100,147 @@ namespace Platformer
       
         public void UpdateDirection(Vector2 dir)
         {
-            if(PlayerController.Instance.PlayerState == PlayerState.Attacking)
-            {
-                _enemyState = EnemyState.Fleeing;
-                SwitchAnimation("Fleeing1");
-            }
-            else if (PlayerController.Instance.PlayerState == PlayerState.Walking)
-            {
-                _enemyState = EnemyState.Roaming;
-                SwitchAnimation("Roaming");
-            }
+            //if(PlayerController.Instance.PlayerState == PlayerState.Attacking)
+            //{
+            //    _enemyState = EnemyState.Fleeing;
+            //    SwitchAnimation("Fleeing1");
+            //}
+            //else if (PlayerController.Instance.PlayerState == PlayerState.Walking)
+            //{
+            //    _enemyState = EnemyState.Roaming;
+            //    SwitchAnimation("Roaming");
+            //}
 
-            if (_enemyState == EnemyState.Roaming)
-            {
+            //if (_enemyState == EnemyState.Roaming)
+            //{
              
-                switch (_enemyType)
-                {
-                    case EnemyType.Dumb:
-                        direction = GetRandomDirection();
-                        if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
-                        {
-                            var newDestination = Position + (direction * Level.TileSize);
-                            destination = newDestination;
-                            moving = true;
-                        }
-                        break;
-                    case EnemyType.Smart:
-                        if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
-                        {
-                            var newDestination = Position + (direction * Level.TileSize);
-                            destination = newDestination;
-                            moving = true;
-                        }
-                        else
-                        {
-                            direction = GetRandomDirection();
-                            if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
-                            {
-                                var newDestination = Position + (direction * Level.TileSize);
-                                destination = newDestination;
-                                moving = true;
-                            }
-                        }
-                        break;
-                    case EnemyType.Follow:
+            //    switch (_enemyType)
+            //    {
+            //        case EnemyType.Dumb:
+            //            direction = GetRandomDirection();
+            //            if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
+            //            {
+            //                var newDestination = Position + (direction * Level.TileSize);
+            //                destination = newDestination;
+            //                moving = true;
+            //            }
+            //            break;
+            //        case EnemyType.Smart:
+            //            if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
+            //            {
+            //                var newDestination = Position + (direction * Level.TileSize);
+            //                destination = newDestination;
+            //                moving = true;
+            //            }
+            //            else
+            //            {
+            //                direction = GetRandomDirection();
+            //                if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
+            //                {
+            //                    var newDestination = Position + (direction * Level.TileSize);
+            //                    destination = newDestination;
+            //                    moving = true;
+            //                }
+            //            }
+            //            break;
+            //        case EnemyType.Follow:
 
-                        var playerPos = PlayerController.Instance.Position;
+            //            var playerPos = PlayerController.Instance.Position;
 
-                        //First check what direction the player is in
-                        var diff = playerPos - Position;
-                        //Choose direction based on X/Y
-                        if(Math.Abs(diff.X) > Math.Abs(diff.Y))
-                        {
-                            direction = diff.X > 0 ? new Vector2(1, 0) : new Vector2(-1, 0);
-                        }
-                        else if (Math.Abs(diff.Y) > Math.Abs(diff.X))
-                        {
-                            direction = diff.Y > 0 ? new Vector2(0, 1) : new Vector2(0, -1);
-                        }
-                       //Check if that direction is possible to go to
-                        if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
-                        {
-                            var newDestination = Position + (direction * Level.TileSize);
-                            destination = newDestination;
-                            moving = true;
-                        }
-                        else//If blocked do a bunch of bullshit to reach the target
-                        {
-                            if (Math.Abs(diff.X) > Math.Abs(diff.Y))
-                            {
-                                direction = diff.X > 0 ? new Vector2(0, -1) : new Vector2(0, 1);
-                            }
-                            else if (Math.Abs(diff.Y) > Math.Abs(diff.X))
-                            {
-                                direction = diff.Y > 0 ? new Vector2(1, 0) : new Vector2(-1, 0);
-                            }
-                            if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
-                            {
-                                var newDestination = Position + (direction * Level.TileSize);
-                                destination = newDestination;
-                                moving = true;
-                            }
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                // Flee from the player (opposite direction)
-                var playerPos = PlayerController.Instance.Position;
-                var diff = Position - playerPos;
-                if (Math.Abs(diff.X) > Math.Abs(diff.Y))
-                {
-                    direction = diff.X > 0 ? new Vector2(1, 0) : new Vector2(-1, 0);
-                }
-                else
-                {
-                    direction = diff.Y > 0 ? new Vector2(0, 1) : new Vector2(0, -1);
-                }
-                if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
-                {
-                    var newDestination = Position + (direction * Level.TileSize);
-                    destination = newDestination;
-                    moving = true;
-                }
-                else//If blocked do a bunch of bullshit to reach the target
-                {
-                    if (Math.Abs(diff.X) > Math.Abs(diff.Y))
-                    {
-                        direction = diff.X > 0 ? new Vector2(0, -1) : new Vector2(0, 1);
-                    }
-                    else if (Math.Abs(diff.Y) > Math.Abs(diff.X))
-                    {
-                        direction = diff.Y > 0 ? new Vector2(1, 0) : new Vector2(-1, 0);
-                    }
-                    if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
-                    {
-                        var newDestination = Position + (direction * Level.TileSize);
-                        destination = newDestination;
-                        moving = true;
-                    }
-                    else
-                    {
-                        if (Math.Abs(diff.X) > Math.Abs(diff.Y))
-                        {
-                            direction = diff.X < 0 ? new Vector2(0, -1) : new Vector2(0, 1);
-                        }
-                        else if (Math.Abs(diff.Y) > Math.Abs(diff.X))
-                        {
-                            direction = diff.Y < 0 ? new Vector2(1, 0) : new Vector2(-1, 0);
-                        }
-                        if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
-                        {
-                            var newDestination = Position + (direction * Level.TileSize);
-                            destination = newDestination;
-                            moving = true;
-                        }
-                    }
-                }
-            }
+            //            //First check what direction the player is in
+            //            var diff = playerPos - Position;
+            //            //Choose direction based on X/Y
+            //            if(Math.Abs(diff.X) > Math.Abs(diff.Y))
+            //            {
+            //                direction = diff.X > 0 ? new Vector2(1, 0) : new Vector2(-1, 0);
+            //            }
+            //            else if (Math.Abs(diff.Y) > Math.Abs(diff.X))
+            //            {
+            //                direction = diff.Y > 0 ? new Vector2(0, 1) : new Vector2(0, -1);
+            //            }
+            //           //Check if that direction is possible to go to
+            //            if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
+            //            {
+            //                var newDestination = Position + (direction * Level.TileSize);
+            //                destination = newDestination;
+            //                moving = true;
+            //            }
+            //            else//If blocked do a bunch of bullshit to reach the target
+            //            {
+            //                if (Math.Abs(diff.X) > Math.Abs(diff.Y))
+            //                {
+            //                    direction = diff.X > 0 ? new Vector2(0, -1) : new Vector2(0, 1);
+            //                }
+            //                else if (Math.Abs(diff.Y) > Math.Abs(diff.X))
+            //                {
+            //                    direction = diff.Y > 0 ? new Vector2(1, 0) : new Vector2(-1, 0);
+            //                }
+            //                if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
+            //                {
+            //                    var newDestination = Position + (direction * Level.TileSize);
+            //                    destination = newDestination;
+            //                    moving = true;
+            //                }
+            //            }
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
+            //else
+            //{
+            //    // Flee from the player (opposite direction)
+            //    var playerPos = PlayerController.Instance.Position;
+            //    var diff = Position - playerPos;
+            //    if (Math.Abs(diff.X) > Math.Abs(diff.Y))
+            //    {
+            //        direction = diff.X > 0 ? new Vector2(1, 0) : new Vector2(-1, 0);
+            //    }
+            //    else
+            //    {
+            //        direction = diff.Y > 0 ? new Vector2(0, 1) : new Vector2(0, -1);
+            //    }
+            //    if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
+            //    {
+            //        var newDestination = Position + (direction * Level.TileSize);
+            //        destination = newDestination;
+            //        moving = true;
+            //    }
+            //    else//If blocked do a bunch of bullshit to reach the target
+            //    {
+            //        if (Math.Abs(diff.X) > Math.Abs(diff.Y))
+            //        {
+            //            direction = diff.X > 0 ? new Vector2(0, -1) : new Vector2(0, 1);
+            //        }
+            //        else if (Math.Abs(diff.Y) > Math.Abs(diff.X))
+            //        {
+            //            direction = diff.Y > 0 ? new Vector2(1, 0) : new Vector2(-1, 0);
+            //        }
+            //        if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
+            //        {
+            //            var newDestination = Position + (direction * Level.TileSize);
+            //            destination = newDestination;
+            //            moving = true;
+            //        }
+            //        else
+            //        {
+            //            if (Math.Abs(diff.X) > Math.Abs(diff.Y))
+            //            {
+            //                direction = diff.X < 0 ? new Vector2(0, -1) : new Vector2(0, 1);
+            //            }
+            //            else if (Math.Abs(diff.Y) > Math.Abs(diff.X))
+            //            {
+            //                direction = diff.Y < 0 ? new Vector2(1, 0) : new Vector2(-1, 0);
+            //            }
+            //            if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
+            //            {
+            //                var newDestination = Position + (direction * Level.TileSize);
+            //                destination = newDestination;
+            //                moving = true;
+            //            }
+            //        }
+            //    }
+            //}
         }
         private Vector2 GetRandomDirection()
         {

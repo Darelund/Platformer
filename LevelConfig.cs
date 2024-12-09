@@ -8,36 +8,37 @@ using System.Threading.Tasks;
 
 namespace Platformer
 {
-    public class LevelConfig
-    {
-        public string LevelFile { get; }
-        public Vector2 LevelStartPosition { get; }
-       // public Vector2 PlayerStartPosition { get; }
-        public List<(char TileName, Texture2D tileTexture, TileType type, Color tileColor)> TileData { get; }
-        //  public string GameObjectsFile { get; }
-        public List<char> GameObjectData;
+    //Probably not using anymore
+    //public class LevelConfig
+    //{
+    //    public string LevelFile { get; }
+    //    public Vector2 LevelStartPosition { get; }
+    //   // public Vector2 PlayerStartPosition { get; }
+    //    public List<(char TileName, Texture2D tileTexture, TileType type, Color tileColor)> TileData { get; }
+    //    //  public string GameObjectsFile { get; }
+    //    public List<char> GameObjectData;
 
-        public LevelConfig
-            (string levelFile, 
-            Vector2 levelStartPosition,
-            List<(char TileName, Texture2D tileTexture, TileType type, Color tileColor)> tileData,
-            List<char> gameObjectData
-           /*  string gameObjectsFile, Vector2 playerStartPosition*/)
-        {
-            LevelFile = levelFile;
-            LevelStartPosition = levelStartPosition;
-            TileData = tileData;
-            GameObjectData = gameObjectData;
-           // GameObjectsFile = gameObjectsFile;
-          //  PlayerStartPosition = playerStartPosition;
-        }
-        public LevelConfig(string levelFile, Vector2 levelStartPosition
-          /*  string gameObjectsFile, Vector2 playerStartPosition*/)
-        {
-            LevelFile = levelFile;
-            LevelStartPosition = levelStartPosition;
-            // GameObjectsFile = gameObjectsFile;
-            //  PlayerStartPosition = playerStartPosition;
-        }
-    }
+    //    public LevelConfig
+    //        (string levelFile, 
+    //        Vector2 levelStartPosition,
+    //        List<(char TileName, Texture2D tileTexture, TileType type, Color tileColor)> tileData,
+    //        List<char> gameObjectData
+    //       /*  string gameObjectsFile, Vector2 playerStartPosition*/)
+    //    {
+    //        LevelFile = levelFile;
+    //        LevelStartPosition = levelStartPosition;
+    //        TileData = tileData;
+    //        GameObjectData = gameObjectData;
+    //       // GameObjectsFile = gameObjectsFile;
+    //      //  PlayerStartPosition = playerStartPosition;
+    //    }
+    //    public LevelConfig(string levelFile, Vector2 levelStartPosition
+    //      /*  string gameObjectsFile, Vector2 playerStartPosition*/)
+    //    {
+    //        LevelFile = levelFile;
+    //        LevelStartPosition = levelStartPosition;
+    //        // GameObjectsFile = gameObjectsFile;
+    //        //  PlayerStartPosition = playerStartPosition;
+    //    }
+    //}
 }
