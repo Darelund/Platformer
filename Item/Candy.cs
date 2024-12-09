@@ -10,7 +10,7 @@ namespace Platformer
 {
     public class Candy : Item
     {
-        public Candy(Texture2D texture, Vector2 position, Rectangle rect, Color color, float rotation, float size, float layerDepth, Vector2 origin) : base(texture, position, rect, color, rotation, size, layerDepth, origin)
+        public Candy(Texture2D texture, Rectangle rect, Color color, float rotation, float layerDepth, Vector2 origin) : base(texture, rect, color, rotation, layerDepth, origin)
         {
             _minScore = 10;
             _maxScore = 50;
@@ -19,7 +19,7 @@ namespace Platformer
 
             //De fuckar på något sätt
             _rect = new Rectangle(0, 0, 15, 15);
-            Size = 0.5f;
+            //Size = 0.5f;
             
         }
         public override void OnCollision(GameObject gameObject)

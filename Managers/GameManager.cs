@@ -70,15 +70,15 @@ namespace Platformer
                         if (GameObjects[i] is PlayerController)
                         {
                             var player = GameObjects[i] as PlayerController;
-                            if (player.Health <= 0)
-                            {
-                                OnGameOver?.Invoke(Color.Black, GameState.GameOver);
-                            }
+                            //if (player.Health <= 0)
+                            //{
+                            //    OnGameOver?.Invoke(Color.Black, GameState.GameOver);
+                            //}
 
-                            if (LevelManager.GetCurrentLevel.IsLevelCompleted())
-                            {
-                                OnWin?.Invoke(Color.Green, GameState.Victory);
-                            }
+                            //if (LevelManager.GetCurrentLevel.IsLevelCompleted())
+                            //{
+                            //    OnWin?.Invoke(Color.Green, GameState.Victory);
+                            //}
                         }
                         GameObjects[i].Update(gameTime);
                     }
@@ -94,9 +94,11 @@ namespace Platformer
                     break;
                 case GameState.Playing:
                     InputManager.Update();
-                    TileEditor.Update();
+
+                    //För att edita mappen, lägger till snart
+                  //  TileEditor.Update();
                     UIManager.Update(gameTime);
-                    LevelManager.GetCurrentLevel.Update(gameTime);
+                   // LevelManager.GetCurrentLevel.Update(gameTime);
                     // Level.Update(gameTime);
                     for (int i = 0; i < GameObjects.Count; i++)
                     {
@@ -108,10 +110,10 @@ namespace Platformer
                                 OnGameOver?.Invoke(Color.Black, GameState.GameOver);
                             }
 
-                            if (LevelManager.GetCurrentLevel.IsLevelCompleted())
-                            {
-                                OnWin?.Invoke(Color.Green, GameState.Victory);
-                            }
+                            //if (LevelManager.GetCurrentLevel.IsLevelCompleted())
+                            //{
+                            //    OnWin?.Invoke(Color.Green, GameState.Victory);
+                            //}
                         }
                         GameObjects[i].Update(gameTime);
                     }
@@ -182,10 +184,10 @@ namespace Platformer
                     CharacterSelector.Draw(spriteBatch);
                     break;
                 case GameState.Playing:
-                    LevelManager.GetCurrentLevel.Draw(spriteBatch);
+                   // LevelManager.GetCurrentLevel.Draw(spriteBatch);
 
                     UIManager.Draw(spriteBatch);
-                    TileEditor.Draw(spriteBatch);
+                   // TileEditor.Draw(spriteBatch);
 
                     foreach (var gameObject in GameObjects)
                     {

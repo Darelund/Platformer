@@ -18,7 +18,7 @@ namespace Platformer
 
         private PlayerController _target;
 
-        public Weapon(Texture2D texture, Vector2 position, Rectangle rect, Color color, float rotation, float size, float layerDepth, Vector2 origin) : base(texture, position, rect, color, rotation, size, layerDepth, origin)
+        public Weapon(Texture2D texture, Rectangle rect, Color color, float rotation, float layerDepth, Vector2 origin) : base(texture, rect, color, rotation, layerDepth, origin)
         {
             _minScore = 250;
             _maxScore = 500;

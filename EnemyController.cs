@@ -38,7 +38,7 @@ namespace Platformer
             get => _health;
             private set => _health = value;
         }
-        public EnemyController(Texture2D texture, Vector2 position, Color color, float rotation, float size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, color, rotation, size, layerDepth, origin, animationClips)
+        public EnemyController(Texture2D texture, Rectangle rect, Color color, float rotation, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, rect, color, rotation, layerDepth, origin, animationClips)
         {
             Random ran = new Random();
             int enemyType = ran.Next(0, 3);

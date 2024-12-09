@@ -22,17 +22,17 @@ namespace Platformer
         protected Random _random = new Random();
         protected int _score;
         protected Rectangle _rect;
-        public override Rectangle Collision
-        {
-            get
-            {
-                return new Rectangle((int)Position.X - (int)(Origin.X * Size), (int)Position.Y - (int)(Origin.Y * Size), (int)(_rect.Width * Size), (int)(_rect.Height * Size));
-            }
-        }
+        public override Rectangle Collision => throw new NotImplementedException();
+        //{
+        //    //get
+        //    //{
+        //    //    return new Rectangle((int)Position.X - (int)(Origin.X * Size), (int)Position.Y - (int)(Origin.Y * Size), (int)(_rect.Width * Size), (int)(_rect.Height * Size));
+        //    //}
+        //}
 
         
 
-        public Item(Texture2D texture, Vector2 position, Rectangle rect, Color color, float rotation, float size, float layerDepth, Vector2 origin) : base(texture, position, color, rotation, size, layerDepth, origin)
+        public Item(Texture2D texture, Rectangle rect, Color color, float rotation, float layerDepth, Vector2 origin) : base(texture, rect, color, rotation, layerDepth, origin)
         {
             _rect = rect;
         }
@@ -40,7 +40,7 @@ namespace Platformer
         public abstract override void Update(GameTime gameTime);
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, Position, _rect, Color, Rotation, Origin, Size, SpriteEffect, LayerDepth);
+           // spriteBatch.Draw(Texture, Position, _rect, Color, Rotation, Origin, Size, SpriteEffect, LayerDepth);
         }
 
     }

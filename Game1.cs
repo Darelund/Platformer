@@ -12,13 +12,13 @@ namespace Platformer
         private SpriteBatch _spriteBatch;
 
         //Remove and add new textures
-        private const string _textures = "wall,ghost,pacman,tiles,pacman-character-yellow,pacman-character-pink,pacman-heart,empty,pacman_white,pacman_deathClip";
+        private const string _textures = "GameColors,mario-pauline-transparent,wall,ghost,pacman,tiles,pacman-character-yellow,pacman-character-pink,pacman-heart,empty,pacman_white,pacman_deathClip";
         private const string _sounds = "DeathSound,HardPop,FlameDamage,CoinPickupSound";
         private const string _music = "BackgroundMusic";
         private const string _font = "GameText";
         private const string _effects = "FlashEffect";
 
-        private PlayerController _playerController;
+       // private PlayerController _playerController;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -48,20 +48,20 @@ namespace Platformer
 
             ResourceManager.LoadResources(Content, _textures, _sounds, _music, _font, _effects);
 
-            Rectangle[] playerWalking =
-            {
-                new Rectangle(0, 0, 39, 39),
-                new Rectangle(40, 0, 39, 39),
-                new Rectangle(80, 0, 39, 39),
-                new Rectangle(120, 0, 39, 39)
-            };
+            //Rectangle[] playerWalking =
+            //{
+            //    new Rectangle(0, 0, 39, 39),
+            //    new Rectangle(40, 0, 39, 39),
+            //    new Rectangle(80, 0, 39, 39),
+            //    new Rectangle(120, 0, 39, 39)
+            //};
 
-            Dictionary<string, AnimationClip> playerAnimations = new Dictionary<string, AnimationClip>()
-            {
-                {"Idle",  new AnimationClip(playerWalking, 12f)}
-            };
+            //Dictionary<string, AnimationClip> playerAnimations = new Dictionary<string, AnimationClip>()
+            //{
+            //    {"Idle",  new AnimationClip(playerWalking, 12f)}
+            //};
 
-            _playerController = new PlayerController(ResourceManager.GetTexture("pacman"), new Vector2(300, 300), Color.White, 0f, 1f, 0f, new Vector2(20, 20), playerAnimations);
+            //_playerController = new PlayerController(ResourceManager.GetTexture("pacman"), new Vector2(300, 300), Color.White, 0f, 1f, 0f, new Vector2(20, 20), playerAnimations);
 
 
             GameManager.ContentLoad();

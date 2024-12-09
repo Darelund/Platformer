@@ -15,40 +15,34 @@ namespace Platformer
         private static JObject wholeObject;
         private static string currentFileName;
 
-        public static Rectangle GetRectangle(string fileName, string propertyName)
+        private static bool CheckIfPropertyExists(string fileName, string propertyName)
         {
-            if (wholeObject == null || currentFileName == null || currentFileName != null)
-            {
-                GetJObjectFromFile(fileName);
-            }
-            JObject obj = wholeObject.GetValue(propertyName) as JObject;
-            return GetRectangle(obj);
-        }
-        public static List<Rectangle> GetRectangles(string fileName, string propertyName)
-        {
-            if (wholeObject == null || currentFileName == null || currentFileName != null)
-            {
-                GetJObjectFromFile(fileName);
-            }
-
-            List<Rectangle> list = new List<Rectangle>();
-            JArray arrayObject = wholeObject.GetValue(propertyName) as JArray;
-
-            for (int i = 0; i < arrayObject.Count; i++)
-            {
-                JObject obj = (JObject)arrayObject[i];
-
-                list.Add(GetRectangle(obj));
-            }
-            return list;
+            GetJObjectFromFile(fileName);
+            return wholeObject[propertyName] != null;
         }
         private static void GetJObjectFromFile(string fileName)
         {
-            currentFileName = fileName;
-            StreamReader file = File.OpenText($"Content/{fileName}");
-            JsonTextReader reader = new JsonTextReader(file);
-            wholeObject = JObject.Load(reader);
-            file.Close();
+            if (wholeObject == null || currentFileName == null || currentFileName != null)
+            {
+                currentFileName = fileName;
+                StreamReader file = File.OpenText($"Content/{fileName}");
+                JsonTextReader reader = new JsonTextReader(file);
+                wholeObject = JObject.Load(reader);
+                file.Close();
+            }
+        }
+        private static (JObject singleObject, JArray arrayObject) GetProperty(string fileName, string propertyName)
+        {
+            GetJObjectFromFile(fileName);
+            JToken token = wholeObject[propertyName];
+
+            if (token is JObject obj)
+                return (obj, null);
+
+            if (token is JArray array)
+                return (null, array);
+
+            throw new InvalidOperationException($"Property {propertyName} is neither an object nor an array.");
         }
         private static Rectangle GetRectangle(JObject obj)
         {
@@ -56,31 +50,43 @@ namespace Platformer
             int y = Convert.ToInt32(obj.GetValue("positionY"));
             int width = Convert.ToInt32(obj.GetValue("width"));
             int height = Convert.ToInt32(obj.GetValue("height"));
-
             return new Rectangle(x, y, width, height);
         }
         public static List<GameObject> CreateGameObjects(string fileName)
         {
-            string player = "player";
-            string platform = "platforms";
-            string enemy = "enemies";
+            // Define property names
+            var properties = new Dictionary<string, Func<Rectangle, GameObject>>
+        {
+            { "player", rect => GameObjectFactory.CreateGameObject(("player", rect)) },
+            { "platforms", rect => GameObjectFactory.CreateGameObject(("platforms", rect)) },
+            { "enemies", rect => GameObjectFactory.CreateGameObject(("enemies", rect)) }
+        };
 
-            List<GameObject> gameObjects = new List<GameObject>();
+            var gameObjects = new List<GameObject>();
 
-            //Removing play for now
-           // Vector2 playerVec = GetVector(fileName, player);
-           // gameObjects.Add(GameObjectFactory.CreateGameObject((player, playerVec )));
-
-            List<Rectangle> vecList = GetRectangles(fileName, platform);
-            foreach (Rectangle vec in vecList)
+            foreach (var property in properties)
             {
-                gameObjects.Add(GameObjectFactory.CreateGameObject((platform, vec)));
-            }
+                string propertyName = property.Key;
+                var objectCreator = property.Value;
 
-            vecList = GetRectangles(fileName, enemy);
-            foreach (Rectangle vec in vecList)
-            {
-                gameObjects.Add(GameObjectFactory.CreateGameObject((enemy, vec)));
+                if (CheckIfPropertyExists(fileName, propertyName))
+                {
+                    var (singleObject, arrayObject) = GetProperty(fileName, propertyName);
+
+                    if (singleObject != null)
+                    {
+                        Rectangle rect = GetRectangle(singleObject);
+                        gameObjects.Add(objectCreator(rect));
+                    }
+                    else if (arrayObject != null)
+                    {
+                        foreach (JObject obj in arrayObject)
+                        {
+                            Rectangle rect = GetRectangle(obj);
+                            gameObjects.Add(objectCreator(rect));
+                        }
+                    }
+                }
             }
 
             return gameObjects;

@@ -13,7 +13,7 @@ namespace Platformer
     {
         public static List<Level> Levels = new List<Level>();
         public static Level GetCurrentLevel => Levels[LevelIndex];
-        public static int LevelIndex { get; private set; } = - 1;
+        public static int LevelIndex { get; private set; } = -1;
 
         public static void CreateLevels()
         {

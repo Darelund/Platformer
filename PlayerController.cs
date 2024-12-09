@@ -11,12 +11,16 @@ namespace Platformer
 {
     public enum PlayerState
     {
+        Idle,
         Walking,
-        Attacking
+        Sprinting,
+        Attacking,
+        Jumping,
+        Dying
     }
     public class PlayerController : AnimatedGameObject
     {
-        public PlayerState PlayerState = PlayerState.Walking;
+        public PlayerState PlayerState = PlayerState.Idle;
         private Vector2 direction;
         private Vector2 newDirection;
         private Vector2 destination;
@@ -31,11 +35,45 @@ namespace Platformer
         public bool IsImmune { get; set; } = false;
         private bool _inAttackMode = false;
         private bool _isActive = true;
-        private float _speed = 50;
+
+        private float normalSpeed = 75;
+        private float _sprintSpeed = 50;
+        private float _fallSpeed = 50f;
+
+        private bool _isGrounded;
+        private bool _isSprinting;
+        private bool _isAttacking;
+        private bool _isJumping;
+
+        protected float Speed
+        {
+            get
+            {
+                if (!_isGrounded)
+                {
+                    return _fallSpeed;
+                }
+                else
+                {
+                    if (_isSprinting && _isGrounded)
+                    {
+                        return normalSpeed + _sprintSpeed;
+                    }
+                    else
+                    {
+                        return normalSpeed;
+                    }
+                }
+            }
+        }
 
         private const string _attackAnim = "Attack";
         private const string _dieAnim = "Die";
         private const string _idleAnim = "Idle";
+        private const string _walkAnim = "Walk";
+        private const string _jumpAnim = "Jump";
+        private const string _sprintAnim = "Sprint";
+        private const string _climbAnim = "Climb";
 
         private static PlayerController _instance;
         public static PlayerController Instance
@@ -48,98 +86,108 @@ namespace Platformer
                     return null;
             }
         }
-        public PlayerController(Texture2D texture, Vector2 position, Color color, float rotation, float size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, color, rotation, size, layerDepth, origin, animationClips)
+        public PlayerController(Texture2D texture, Rectangle rect, Color color, float rotation, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, rect, color, rotation, layerDepth, origin, animationClips)
         {
             _currentHealth = _maxHealth;
             _instance = this;
+            Position = new Vector2(rect.X, rect.Y);
         }
 
         public override void Update(GameTime gameTime)
         {
             if (!_isActive) return;
 
-            if (!moving)
-            {
-                newDirection = GetNewDirection();
+            StateMachine(gameTime);
 
-                if (newDirection.Length() != 0)
-                    direction = newDirection;
 
-                //if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
-                //{
-                //    var newDestination = Position + (direction * Level.TileSize);
-                //    destination = newDestination;
-                //    moving = true;
-                //}
-            }
-            else
-            {
-                Position += direction * (Level.TileSize.X + _speed) * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (Vector2.Distance(Position, destination) < 1)
-                {
-                    Position = destination;
-                    moving = false;
-                }
-
-                if(InputManager.DebugButton())
-                {
-                    TakeDamage(1);
-                }
-            }
+            Debug.WriteLine(Position.ToString());
 
             base.Update(gameTime);
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
+            spriteBatch.Draw(Texture, new Rectangle((int)Position.X, (int)Position.Y, Rect.Width, Rect.Height), _currentClip.GetCurrentSourceRectangle(), Color, Rotation, Origin, SpriteEffect, LayerDepth);
+          //  base.Draw(spriteBatch);
         }
-        private Vector2 GetNewDirection()
+        private void StateMachine(GameTime gameTime)
         {
-            Vector2 direction = Vector2.Zero;
-           
-
             direction = InputManager.GetMovement();
-            //if (LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
-            //{
-            //    direction = Vector2.Zero;
-            //    //Not necessary but makes the code clearer
-            //    //Or I actually think I need to set it to false
-            //    //Or I do think No I don't need it because I set the direction to zero, so it will go back to false in the Update either way
-            //    //Eh lets just leave it
-            //    moving = false;
-            //}
-            //else
-            //{
-            //    if (direction.Length() != 0)
-            //    {
-            //        if (direction.X != 0)
-            //        {
-            //            if (direction.X == -1)
-            //            {
-            //                Rotation = MathHelper.ToRadians(180);
-            //            }
-            //            else
-            //            {
-            //                Rotation = MathHelper.ToRadians(0);
-            //            }
-            //        }
-            //        else
-            //        {
-            //            if (direction.Y == -1)
-            //            {
-            //                Rotation = MathHelper.ToRadians(270);
-            //            }
-            //            else
-            //            {
-            //                Rotation = MathHelper.ToRadians(90);
-            //            }
-            //        }
-            //    }
-            //}
-           
-            return direction;
+           _isSprinting = InputManager.IsLeftShiftDown();
+           _isAttacking = InputManager.LeftClick();
+           _isJumping = InputManager.IsSpacebarDown();
+
+            switch (PlayerState)
+            {
+                case PlayerState.Idle:
+                    if (_isAttacking) ChangeState(PlayerState.Attacking);
+                    else if (_isJumping) ChangeState(PlayerState.Jumping);
+                    else if (direction != Vector2.Zero) ChangeState(_isSprinting ? PlayerState.Sprinting : PlayerState.Walking);
+                    break;
+
+                case PlayerState.Walking:
+                    if (direction != Vector2.Zero) ChangeState(PlayerState.Idle);
+                    else if (_isJumping) ChangeState(PlayerState.Jumping);
+                    else if (_isAttacking) ChangeState(PlayerState.Attacking);
+                    else if (_isSprinting) ChangeState(PlayerState.Sprinting);
+                    Move(gameTime);
+                    break;
+
+                case PlayerState.Sprinting:
+                    if (!_isSprinting || direction == Vector2.Zero) ChangeState(PlayerState.Walking);
+                    else if (_isJumping) ChangeState(PlayerState.Jumping);
+                    else if (_isAttacking) ChangeState(PlayerState.Attacking);
+                    break;
+
+                case PlayerState.Attacking:
+                    if (!_isAttacking) ChangeState(PlayerState.Idle);
+                    break;
+
+                case PlayerState.Jumping:
+                    if (!_isJumping) ChangeState(PlayerState.Idle);
+                    break;
+
+                case PlayerState.Dying:
+                    Debug.WriteLine("Dying");
+                    break;
+            }
         }
-        
+        private void ChangeState(PlayerState newState)
+        {
+           if(PlayerState == newState) return;
+
+           PlayerState = newState;
+            switch (PlayerState)
+            {
+                case PlayerState.Idle:
+                    SwitchAnimation(_idleAnim);
+                    break;
+                case PlayerState.Walking:
+                    SwitchAnimation(_walkAnim);
+                    break;
+                case PlayerState.Sprinting:
+                    SwitchAnimation(_sprintAnim);
+                    break;
+                case PlayerState.Attacking:
+                    SwitchAnimation(_attackAnim);
+                    break;
+                case PlayerState.Jumping:
+                    SwitchAnimation(_jumpAnim);
+                    break;
+                case PlayerState.Dying:
+                    SwitchAnimation(_dieAnim);
+                    break;
+            }
+        }
+        private void Move(GameTime gameTime)
+        {
+            AnimationFlip();
+            Position += direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
+        private void AnimationFlip()
+        {
+            if (direction.X != 0) SpriteEffect = direction.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+        }
+
         public void TakeDamage(int amount)
         {
             //Maybe add thís back later

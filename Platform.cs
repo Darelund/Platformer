@@ -25,7 +25,7 @@ namespace Platformer
         //Not used right now
         private Rectangle _sourceRec = new Rectangle(0, 0, 40, 20);
 
-        public Platform(Texture2D texture, Vector2 position, PlatformType type, Color color, float rotation, float size, float layerDepth) : base(texture, position, color, rotation, size, layerDepth, Vector2.Zero /* Maybe add an origo to platforms*/ )
+        public Platform(Texture2D texture, Rectangle rect, PlatformType type, Color color, float rotation, float layerDepth) : base(texture, rect, color, rotation, layerDepth, Vector2.Zero /* Maybe add an origo to platforms*/ )
         {
             Type = type;
         }
@@ -43,7 +43,7 @@ namespace Platformer
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, Position, _sourceRec, Color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.9f);
+            spriteBatch.Draw(Texture, Rect, null, Color, 0f, Vector2.Zero, SpriteEffects.None, 0.9f);
         }
         public void SwitchTile(Texture2D newTexture)
         {

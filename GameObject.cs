@@ -12,24 +12,21 @@ namespace Platformer
     {
         protected Texture2D Texture;
 
-        //Maybe
-        // public Vector2 Position { get; set; }
+        protected Vector2 Position { get; set; }
         protected Rectangle Rect;
         protected Color Color;
         protected float Rotation;
-        protected float Size;
         protected float LayerDepth;
         protected Vector2 Origin;
         protected SpriteEffects SpriteEffect;
         public abstract Rectangle Collision { get; }
 
-        public GameObject(Texture2D texture, Rectangle rect, Color color, float rotation, float size, float layerDepth, Vector2 origin)
+        public GameObject(Texture2D texture, Rectangle rect, Color color, float rotation, float layerDepth, Vector2 origin)
         {
             Texture = texture;
             Rect = rect;
             Color = color;
             Rotation = rotation;
-            Size = size;
             LayerDepth = layerDepth;
             Origin = origin;
         }

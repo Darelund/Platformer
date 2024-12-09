@@ -18,10 +18,10 @@ namespace Platformer
             get
             {
                 Rectangle rec = _currentClip.GetCurrentSourceRectangle();
-                return new Rectangle((int)Position.X - (int)Origin.X * (int)Size, (int)Position.Y - (int)Origin.Y * (int)Size, rec.Width * (int)Size, rec.Height * (int)Size);
+                return new Rectangle((int)Position.X - (int)Origin.X * (int)Rect.Width, (int)Position.Y - (int)Origin.Y * (int)Rect.Height, rec.Width * (int)Rect.Width, rec.Height * (int)Rect.Height);
             }
         }
-        public AnimatedGameObject(Texture2D texture, Vector2 position, Color color, float rotation, float size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, color, rotation, size, layerDepth, origin)
+        public AnimatedGameObject(Texture2D texture, Rectangle rect, Color color, float rotation, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, rect, color, rotation, layerDepth, origin)
         {
             _animationClips = animationClips;
             //Todo maybe make it possible to choose what animation to start at?
@@ -35,7 +35,7 @@ namespace Platformer
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, Position, _currentClip.GetCurrentSourceRectangle(), Color, Rotation, Origin, Size, SpriteEffect, LayerDepth);
+            spriteBatch.Draw(Texture, Rect, _currentClip.GetCurrentSourceRectangle(), Color, Rotation, Origin, SpriteEffect, LayerDepth);
         }
         protected void SwitchAnimation(string name)
         {

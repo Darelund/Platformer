@@ -18,7 +18,7 @@ namespace Platformer
         private PlayerController _target;
         private Vector2 _targetOffset = new Vector2(0, -20);
 
-        public Wearable(Texture2D texture, Vector2 position, Rectangle rect, Color color, float rotation, float size, float layerDepth, Vector2 origin) : base(texture, position, rect, color, rotation, size, layerDepth, origin)
+        public Wearable(Texture2D texture, Rectangle rect, Color color, float rotation, float size, float layerDepth, Vector2 origin) : base(texture, rect, color, rotation, layerDepth, origin)
         {
             _minScore = 50;
             _maxScore = 150;
@@ -51,18 +51,18 @@ namespace Platformer
         }
         public override void Update(GameTime gameTime)
         {
-            if (state == ItemState.pickupState)
-                Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            else
-            {
-                Position = _target.Position + _targetOffset;
+            //if (state == ItemState.pickupState)
+            //    Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //else
+            //{
+            //    Position = _target.Position + _targetOffset;
 
-                _remainingTimeLeft -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (_remainingTimeLeft <= 0)
-                {
-                    GameManager.GameObjects.Remove(this);
-                }
-            }
+            //    _remainingTimeLeft -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //    if (_remainingTimeLeft <= 0)
+            //    {
+            //        GameManager.GameObjects.Remove(this);
+            //    }
+            //}
         }
     }
 }
